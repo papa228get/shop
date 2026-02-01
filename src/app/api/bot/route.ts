@@ -7,14 +7,41 @@ let bot: Telegraf | null = null;
 if (token) {
     bot = new Telegraf(token);
 
-    // Basic command to start the bot
+    // 1. Command for private chat: Start
     bot.command('start', (ctx) => {
         ctx.reply(
-            'Welcome to the Fashion Store! Click the button below to start shopping.',
+            'Welcome! To open the shop, click the button below.',
             Markup.keyboard([
-                Markup.button.webApp('Open Shop', process.env.WEBAPP_URL || 'https://google.com')
+                Markup.button.webApp('🛍️ Open Shop', process.env.WEBAPP_URL || 'https://google.com')
             ]).resize()
         );
+    });
+
+    // 2. Command to post the Shop Button to a Channel
+    // Usage: /post @my_channel_username
+    bot.command('post', async (ctx) => {
+        const channelUsername = ctx.payload.trim(); // Gets the text after /post
+
+        if (!channelUsername) {
+            return ctx.reply('⚠️ Please specify the channel username.\nExample: /post @my_fashion_channel');
+        }
+
+        try {
+            await ctx.telegram.sendMessage(
+                channelUsername,
+                '🔥 *New Collection is Here!*\n\nClick the button below to browse our exclusive items directly in Telegram.',
+                {
+                    parse_mode: 'Markdown',
+                    ...Markup.inlineKeyboard([
+                        Markup.button.webApp('🛍️ Open Store', process.env.WEBAPP_URL || 'https://google.com')
+                    ])
+                }
+            );
+            ctx.reply(`✅ Successfully posted to ${channelUsername}`);
+        } catch (error) {
+            console.error(error);
+            ctx.reply('❌ Failed to post. Make sure the bot is an Admin in the channel!');
+        }
     });
 }
 
