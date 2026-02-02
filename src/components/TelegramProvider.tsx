@@ -8,22 +8,31 @@ export default function TelegramProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [isLoaded, setIsLoaded] = useState(false);
-
   useEffect(() => {
-    // Dynamically import the SDK to avoid SSR issues
-    const initWebApp = async () => {
-      try {
-        const WebApp = (await import('@twa-dev/sdk')).default;
-        WebApp.ready();
-        WebApp.expand();
-        setIsLoaded(true);
-      } catch (e) {
-        console.error('Error initializing Telegram WebApp SDK', e);
+    const init = () => {
+      if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+        
+        // Удаление системных иконок Next.js
+        const interval = setInterval(() => {
+          const el = document.querySelector('nextjs-portal');
+          if (el) (el as HTMLElement).style.display = 'none';
+        }, 1000);
+        
+        return () => clearInterval(interval);
       }
     };
 
-    initWebApp();
+    const checkInterval = setInterval(() => {
+      if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+        init();
+        clearInterval(checkInterval);
+      }
+    }, 100);
+
+    return () => clearInterval(checkInterval);
   }, []);
 
   return (

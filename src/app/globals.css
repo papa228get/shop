@@ -23,5 +23,27 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  overscroll-behavior: none; /* Prevents "pull to refresh" effect in Telegram */
+  overscroll-behavior: none;
 }
+
+/* Скрываем ВСЕ системные иконки Next.js, Vercel и Netlify */
+next-route-announcer,
+#nextjs-portal,
+#netlify-indicator,
+.netlify-badge,
+[data-nextjs-toast-wrapper],
+[data-nextjs-static-indicator],
+nextjs-portal {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+/* Агрессивное скрытие оверлеев Next.js */
+[data-nextjs-scroll-focus-boundary],
+[data-nextjs-toast-wrapper],
+nextjs-portal {
+  display: none !important;
+  pointer-events: none !important;
+}
+

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import TelegramProvider from "@/components/TelegramProvider";
+import { CartProvider } from "@/context/CartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,11 +32,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <TelegramProvider>{children}</TelegramProvider>
+        <TelegramProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </TelegramProvider>
       </body>
     </html>
   );
