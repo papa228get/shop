@@ -75,7 +75,7 @@ ${itemsText}\n\n` +
     if (ADMIN_ID) {
       await bot.telegram.sendMessage(ADMIN_ID, message, { 
         parse_mode: 'Markdown',
-        disable_web_page_preview: true,
+        link_preview_options: { is_disabled: true },
         reply_markup: {
           inline_keyboard: [
             [{ text: '👤 Посмотреть профиль', url: profileUrl }],

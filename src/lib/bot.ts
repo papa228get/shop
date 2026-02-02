@@ -228,7 +228,7 @@ if (!(bot as any)._isInitialized) {
         const currentText = (ctx.callbackQuery.message as any).text;
         await ctx.editMessageText(currentText + '\n\n✅ *ЗАКАЗ ПОДТВЕРЖДЕН (Остатки обновлены)*', {
             parse_mode: 'Markdown',
-            disable_web_page_preview: true
+            link_preview_options: { is_disabled: true }
         });
     });
 
